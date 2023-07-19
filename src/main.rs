@@ -5,9 +5,11 @@ use bevy::window::PrimaryWindow;
 use bevy::winit::{WinitSettings, WinitWindows};
 use bevy_egui::{egui, EguiContexts, EguiPlugin};
 use bevy_web_asset::WebAssetPlugin;
+use rs::{Item, Recipe};
 
 pub mod desc_win;
 pub mod rs;
+mod search;
 mod stub;
 
 fn main() {
@@ -28,5 +30,14 @@ fn main() {
         .add_systems(Update, desc_win::item_windows)
         .add_systems(Update, desc_win::recipe_windows)
         .add_systems(PostUpdate, desc_win::process_events)
+        .add_systems(Update, search::index_new::<Item>)
+        .add_systems(Update, search::update_index::<Item>)
+        .add_systems(Update, search::search)
+        .init_resource::<search::State>()
+        .add_systems(
+            Update,
+            (search::index_new::<Recipe>, search::update_index::<Recipe>),
+        )
+        .add_systems(PostUpdate, search::update_results)
         .run();
 }
