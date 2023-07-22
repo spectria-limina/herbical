@@ -45,9 +45,9 @@ pub fn item_windows(
                     ui.separator();
                     ui.heading("Recipes:");
                     ui.indent("Recipes", |ui| {
-                        for (id, r) in created_in {
+                        for (rid, r) in created_in {
                             if ui.link(r.name.clone()).clicked() {
-                                win_events.send(WinEvent::Open(id))
+                                win_events.send(WinEvent::Open(rid))
                             }
                         }
                     });
@@ -55,11 +55,11 @@ pub fn item_windows(
 
                 let mut used_in = recipes
                     .iter()
-                    .filter_map(|(_, r)| {
+                    .filter_map(|(rid, r)| {
                         r.materials
                             .iter()
                             .filter_map(|&ItemWithQuantity { item, quantity }| {
-                                (item == id).then_some((r, quantity))
+                                (item == id).then_some((rid, r, quantity))
                             })
                             .at_most_one()
                             .unwrap()
@@ -69,12 +69,12 @@ pub fn item_windows(
                     ui.separator();
                     ui.heading("Used in:");
                     ui.indent("Used in", |ui| {
-                        for (recipe, quantity) in used_in {
+                        for (rid, recipe, quantity) in used_in {
                             if ui
                                 .link(format!("{name} [×{quantity}]", name = recipe.name))
                                 .clicked()
                             {
-                                win_events.send(WinEvent::Open(id))
+                                win_events.send(WinEvent::Open(rid))
                             }
                         }
                     });
