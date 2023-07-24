@@ -1,3 +1,4 @@
+use crate::gemw::Price;
 use crate::rs::*;
 use bevy::{prelude::*, ui};
 use bevy_egui::{egui, EguiContexts};
@@ -26,16 +27,22 @@ pub enum WinEvent {
 }
 
 pub fn item_windows(
-    mut q: Query<(Entity, &Item, &mut DescWin)>,
+    mut q: Query<(Entity, &Item, Option<&Price>, &mut DescWin)>,
     mut recipes: Query<(Entity, &Recipe)>,
     mut win_events: EventWriter<WinEvent>,
     mut contexts: EguiContexts,
 ) {
-    for (id, item, mut win) in &mut q {
+    for (id, item, price, mut win) in &mut q {
         egui::Window::new(format!("Item: {name}", name = item.name))
             .open(&mut win.open)
             .show(contexts.ctx_mut(), |ui| {
-                ui.label(item.desc.clone());
+                ui.horizontal(|ui| {
+                    if let Some(price) = price {
+                        ui.label(format!("GEMW Price: {} gp", price.0));
+                        ui.separator();
+                    }
+                    ui.label(item.desc.clone());
+                });
 
                 let mut created_in = recipes
                     .iter_mut()

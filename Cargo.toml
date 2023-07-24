@@ -8,9 +8,13 @@ edition = "2021"
 [dependencies]
 bevy = { version = "0.11.0" }
 bevy_egui = "0.21.0"
-bevy_web_asset = "0.5.0"
 itertools = "0.11.0"
 regex = "1.9.1"
+pecs = { path = "vendor/pecs", version = "0.4.0" }
+futures-lite = "1.13.0"
+chrono = "0.4.26"
+serde = { version = "1.0.174", features = ["derive"] }
+serde_json = "1.0.103"
 
 # Enable a small amount of optimization in debug mode
 [profile.dev]

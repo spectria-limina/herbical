@@ -38,12 +38,15 @@ pub enum Skill {
 #[derive(Debug)]
 pub struct ItemWithQuantity {
     pub item: Entity, // Expected entity type: Item
-    pub quantity: i64,
+    pub quantity: Quantity,
 }
+
+pub type ItemId = i32;
+pub type Quantity = i64;
 
 #[derive(Component, Debug)]
 pub struct Item {
-    pub id: i32,
+    pub id: ItemId,
     pub name: String,
     pub desc: String,
 }
